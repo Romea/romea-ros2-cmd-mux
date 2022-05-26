@@ -1,0 +1,5 @@
+string topic
+---
+uint8 ACCEPTED = 0
+uint8 REJECTED = 1
+uint8 result

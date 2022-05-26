@@ -14,8 +14,8 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-    srv/Connect.srv
-    srv/Disconnect.srv
+    srv/Subscribe.srv
+    srv/Unsubscribe.srv
     DEPENDENCIES std_msgs
     )
 

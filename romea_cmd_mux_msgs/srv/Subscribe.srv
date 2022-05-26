@@ -1,0 +1,8 @@
+string topic
+float64 timeout
+uint8 priority
+---
+uint8 ACCEPTED = 0
+uint8 REJECTED_TOPIC_ALREADY_SUBSCRIBED = 1
+uint8 REJECTED_PRIORITY_ALREADY_USED = 2
+uint8 result
