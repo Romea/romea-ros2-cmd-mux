@@ -11,9 +11,7 @@ CmdMux::CmdMux(const rclcpp::NodeOptions & options):
   subscribers_(),
   subscribe_service_(),
   unsubscribe_service_(),
-  topics_type_(),
-  qos_(10)
-//  is_publisher_initialized_(false)
+  topics_type_()
 {
   using std::placeholders::_1;
   using std::placeholders::_2;
@@ -32,7 +30,8 @@ CmdMux::CmdMux(const rclcpp::NodeOptions & options):
   unsubscribe_service_=node_->create_service<romea_cmd_mux_msgs::srv::Unsubscribe>(
         "~/unsubscribe", std::bind(&CmdMux::unsubscribe_callback_,this,_1,_2));
 
-  publisher_ = node_->create_generic_publisher("~/out",topics_type_,qos_);
+  auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).reliable().durability_volatile();
+  publisher_ = node_->create_generic_publisher("~/out",topics_type_,qos);
 
 }
 
@@ -85,7 +84,8 @@ void CmdMux::subscribe_callback_(const SubscribeRequestSharedPtr  request,
 
   subscriber.timeout.from_seconds(request->timeout);
   auto f =  std::bind(&CmdMux::publish_callback_,this,_1,request->priority);
-  subscriber.sub = node_->create_generic_subscription(request->topic,topics_type_,qos_,f);
+  auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile();
+  subscriber.sub = node_->create_generic_subscription(request->topic,topics_type_,qos,f);
 
   response->result = Response::ACCEPTED;
 }
@@ -124,12 +124,6 @@ void CmdMux::unsubscribe_callback_(const UnsubscribeRequestSharedPtr request,
 void CmdMux::publish_callback_(MsgSharedPtr msg,unsigned char priotity)
 {
   std::lock_guard<std::mutex> lock(mutex_);
-
-  //  if(!is_publisher_initialized_)
-  //  {
-  //    publisher_= msg->advertise(getNodeHandle(),"cmd_out",1);
-  //    is_publisher_initialized_=true;
-  //  }
 
   rclcpp::Time now = node_->get_clock()->now();
   auto it = subscribers_.find(priotity);

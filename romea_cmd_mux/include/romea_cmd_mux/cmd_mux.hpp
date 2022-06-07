@@ -43,15 +43,7 @@ public:
   rclcpp::node_interfaces::NodeBaseInterface::SharedPtr
   get_node_base_interface() const;
 
-  //  virtual ~CmdMux()=default;
-
-  //  virtual void onInit();
-
-  //  void diagnosticCallback_(ros::TimerEvent & event);
-
-
 protected:
-
 
   bool has_highest_priority_(SubscriberMap::iterator it ,
                              const rclcpp::Time & now);
@@ -74,10 +66,6 @@ protected :
   SubscribeServiceSharedPtr subscribe_service_;
   UnsubscribeServiceSharedPtr unsubscribe_service_;
   std::string topics_type_;
-  rclcpp::QoS qos_;
-  //  std::string publisher_topic_name_;
-  //  bool is_publisher_initialized_;
-
 };
 
 }
