@@ -10,16 +10,6 @@ CmdMuxInterface::CmdMuxInterface(std::shared_ptr<rclcpp::Node> node):
   unsubscription_(node),
   subscribed_topics_()
 {
-
-}
-
-//-----------------------------------------------------------------------------
-CmdMuxInterface::~CmdMuxInterface()
-{
-  for(const std::string & topic : subscribed_topics_)
-  {
-    unsubscription_.unsubscribe(topic);
-  }
 }
 
 //-----------------------------------------------------------------------------
@@ -27,7 +17,7 @@ void CmdMuxInterface::subscribe(const std::string & topic,
                                 const int & priority,
                                 const double & timeout)
 {
-  subscription_.subscribe(topic,priority,timeout);
+  subscription_.subscribe(topic, priority, timeout);
   subscribed_topics_.push_back(topic);
 }
 
@@ -38,4 +28,4 @@ void CmdMuxInterface::unsubscribe(const std::string & topic)
   subscribed_topics_.remove(topic);
 }
 
-}
+}  // namespace romea

@@ -1,22 +1,26 @@
-#ifndef CmdMuxInterface_HPP
-#define CmdMuxInterface_HPP
+#ifndef ROMEA_CMD_MUX_UTILS_CMD_MUX_INTERFACE_HPP_
+#define ROMEA_CMD_MUX_UTILS_CMD_MUX_INTERFACE_HPP_
 
-#include "cmd_mux_subscription_client.hpp"
-#include "cmd_mux_unsubscription_client.hpp"
+// std
+#include <memory>
+#include <list>
+#include <string>
+
+// romea
+#include "romea_cmd_mux_utils/cmd_mux_subscription_client.hpp"
+#include "romea_cmd_mux_utils/cmd_mux_unsubscription_client.hpp"
 
 namespace romea
 {
 
 class CmdMuxInterface
 {
-
 public:
+  ROMEA_CMD_MUX_UTILS_PUBLIC
+  explicit CmdMuxInterface(std::shared_ptr<rclcpp::Node> node);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
-  CmdMuxInterface(std::shared_ptr<rclcpp::Node> node);
-
-  ROMEA_CMD_MUX_UTILS_PUBLIC
-  ~CmdMuxInterface();
+  ~CmdMuxInterface() = default;
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
   void subscribe(const std::string & topic,
@@ -27,14 +31,11 @@ public:
   void unsubscribe(const std::string & topic);
 
 private:
-
   CmdMuxSubscriptionClient subscription_;
   CmdMuxUnsubscriptionClient unsubscription_;
   std::list<std::string> subscribed_topics_;
-
 };
 
+}  // namespace romea
 
-}
-
-#endif
+#endif ROMEA_CMD_MUX_UTILS_CMD_MUX_INTERFACE_HPP_

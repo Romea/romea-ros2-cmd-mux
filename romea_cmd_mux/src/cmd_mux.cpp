@@ -6,7 +6,7 @@ namespace romea
 //-----------------------------------------------------------------------------
 CmdMux::CmdMux(const rclcpp::NodeOptions & options):
   mutex_(),
-  node_(std::make_shared<rclcpp::Node>("cmd_mux",options)),
+  node_(std::make_shared<rclcpp::Node>("cmd_mux", options)),
   publisher_(),
   subscribers_(),
   subscribe_service_(),
