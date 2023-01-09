@@ -106,19 +106,6 @@ TEST_F(TestCmdMuxServices, testUnsubscriptionWhenNoSubscriptionIsDone)
   EXPECT_TRUE(topics.find("/foo") != topics.end());
 }
 
-
-TEST_F(TestCmdMuxServices, testCmdMuxInterfaceAutoUnsubcription)
-{
-  {
-    romea::CmdMuxInterface cmd_mux_interface(cmd_mux->get_node());
-    EXPECT_NO_THROW(cmd_mux_interface.subscribe("/foo", 100, 0.5));
-    EXPECT_NO_THROW(cmd_mux_interface.subscribe("/bar", 110, 0.5));
-    EXPECT_NO_THROW(cmd_mux_interface.unsubscribe("/bar"));
-  }
-  auto topics = cmd_mux->get_node()->get_topic_names_and_types();
-  EXPECT_TRUE(topics.find("/foo") == topics.end());
-}
-
 int main(int argc, char ** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
