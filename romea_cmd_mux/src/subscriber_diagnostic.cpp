@@ -1,37 +1,38 @@
-////local
-//#include "subscriber_diagnostic.hpp"
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
+
+// local
+// #include "subscriber_diagnostic.hpp"
 
 
-
-//namespace romea
-//{
-
+// namespace romea
+// {
 
 
-//DiagnosticSubscriber::DiagnosticSubscriber(const std::string &name,
+// DiagnosticSubscriber::DiagnosticSubscriber(const std::string &name,
 //                                           const std::string &topic,
 //                                           const ros::Duration & duration)
-//{
+// {
 
-//}
+// }
 
-//void DiagnosticSubscriber::update(const SubscriberState & state)
-//{
+// void DiagnosticSubscriber::update(const SubscriberState & state)
+// {
 
-//}
+// }
 
-//void DiagnosticSubscriber::reset()
-//{
+// void DiagnosticSubscriber::reset()
+// {
 
-//}
+// }
 
-//bool DiagnosticSubscriber::isOk() const
-//{
+// bool DiagnosticSubscriber::isOk() const
+// {
 
-//}
+// }
 
-//void DiagnosticSubscriber::run(diagnostic_updater::DiagnosticStatusWrapper &stat)
-//{
+// void DiagnosticSubscriber::run(diagnostic_updater::DiagnosticStatusWrapper &stat)
+// {
 //  std::lock_guard<std::mutex> lock(mutex_);
 
 //  ros::Time now = ros::
@@ -59,24 +60,20 @@
 //    stat.summary(diagnostic_msgs::DiagnosticStatus::ERROR, getName()+" unknown.");
 //    stat.add(getName(), "Unkown");
 //  }
-//}
+// }
 
-//private:
+// private:
 
-//std::string topic_;
-//bool isConnected_;
-//ros::Duration timeout_;
-//ros::Time previous_stamp_;
+// std::string topic_;
+// bool isConnected_;
+// ros::Duration timeout_;
+// ros::Time previous_stamp_;
 
-//mutable std::mutex mutex_;
-//};
-
-
+// mutable std::mutex mutex_;
+// };
 
 
 //} // namespace cmd_mux
 
 
-
-
-//#endif // TOPIC_HANDLE_H
+// #endif // TOPIC_HANDLE_H

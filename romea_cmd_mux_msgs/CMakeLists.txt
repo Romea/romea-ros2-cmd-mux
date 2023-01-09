@@ -14,10 +14,9 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-    srv/Subscribe.srv
-    srv/Unsubscribe.srv
-    DEPENDENCIES std_msgs
-    )
+  srv/Subscribe.srv
+  srv/Unsubscribe.srv
+  DEPENDENCIES std_msgs)
 
 ament_export_dependencies(rosidl_default_runtime)
 ament_package()

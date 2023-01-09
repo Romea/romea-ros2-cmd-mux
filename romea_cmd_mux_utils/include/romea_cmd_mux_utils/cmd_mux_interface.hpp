@@ -1,5 +1,8 @@
-#ifndef ROMEA_CMD_MUX_UTILS_CMD_MUX_INTERFACE_HPP_
-#define ROMEA_CMD_MUX_UTILS_CMD_MUX_INTERFACE_HPP_
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
+
+#ifndef ROMEA_CMD_MUX_UTILS__CMD_MUX_INTERFACE_HPP_
+#define ROMEA_CMD_MUX_UTILS__CMD_MUX_INTERFACE_HPP_
 
 // std
 #include <memory>
@@ -23,9 +26,10 @@ public:
   ~CmdMuxInterface() = default;
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
-  void subscribe(const std::string & topic,
-                 const int & priority,
-                 const double & timeout);
+  void subscribe(
+    const std::string & topic,
+    const int & priority,
+    const double & timeout);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
   void unsubscribe(const std::string & topic);
@@ -38,4 +42,4 @@ private:
 
 }  // namespace romea
 
-#endif ROMEA_CMD_MUX_UTILS_CMD_MUX_INTERFACE_HPP_
+#endif  // ROMEA_CMD_MUX_UTILS__CMD_MUX_INTERFACE_HPP_

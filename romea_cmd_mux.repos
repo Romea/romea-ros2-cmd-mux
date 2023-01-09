@@ -1,0 +1,6 @@
+repositories:
+
+  romea_ros2/tools/romea_cmd_mux:
+    type: git
+    url: git@gitlab-ssh.irstea.fr:romea_ros2/tools/romea_common.git
+    version: main

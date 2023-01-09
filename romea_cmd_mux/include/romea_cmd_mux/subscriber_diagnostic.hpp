@@ -1,22 +1,22 @@
-#ifndef SubscriberDiagnostic_HPP
-#define SubscriberDiagnostic_HPP
+// Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
+// Add license
 
-//ros
-//#include <ros/ros.h>
-//#include <diagnostic_updater/diagnostic_updater.h>
+#ifndef ROMEA_CMD_MUX__SUBSCRIBER_DIAGNOSTIC_HPP_
+#define ROMEA_CMD_MUX__SUBSCRIBER_DIAGNOSTIC_HPP_
+
+// ros
+// #include <ros/ros.h>
+// #include <diagnostic_updater/diagnostic_updater.h>
 
 
 namespace romea
 {
 
 
+// class  DiagnosticSubscriber : public diagnostic_updater::DiagnosticTask
+// {
 
-
-
-//class  DiagnosticSubscriber : public diagnostic_updater::DiagnosticTask
-//{
-
-//public:
+// public:
 
 
 //  DiagnosticSubscriber(const std::string &name, Subscriber * subscriber);
@@ -29,16 +29,13 @@ namespace romea
 
 //  virtual void run(diagnostic_updater::DiagnosticStatusWrapper &stat) override;
 
-//private:
+// private:
 
 //   Subscriber * subscriber_;
 //   mutable std::mutex mutex_;
 //};
 
 
-} // namespace cmd_mux
+}  // namespace romea
 
-
-
-
-#endif // TOPIC_HANDLE_H
+#endif  // ROMEA_CMD_MUX__SUBSCRIBER_DIAGNOSTIC_HPP_

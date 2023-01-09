@@ -3,16 +3,16 @@ project(romea_cmd_mux_utils)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
- set(CMAKE_C_STANDARD 99)
+  set(CMAKE_C_STANDARD 99)
 endif()
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
- set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
- add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
 
@@ -22,22 +22,20 @@ find_package(rclcpp REQUIRED)
 find_package(romea_cmd_mux_msgs REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
- src/cmd_mux_subscription_client.cpp
- src/cmd_mux_unsubscription_client.cpp
- src/cmd_mux_interface.cpp
- )
+  src/cmd_mux_subscription_client.cpp
+  src/cmd_mux_unsubscription_client.cpp
+  src/cmd_mux_interface.cpp)
 
 ament_target_dependencies(${PROJECT_NAME}
- rclcpp
- romea_cmd_mux_msgs
- )
+  rclcpp
+  romea_cmd_mux_msgs)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
- $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
- $<INSTALL_INTERFACE:include>)
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 
 target_compile_definitions(${PROJECT_NAME}
- PRIVATE "ROMEA_CMD_MUX_UTILS_BUILDING_DLL")
+  PRIVATE "ROMEA_CMD_MUX_UTILS_BUILDING_DLL")
 
 ament_export_include_directories(include)
 ament_export_dependencies(rclcpp)
@@ -57,5 +55,14 @@ install(
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
 )
+
+if(BUILD_TESTING)
+
+  find_package(ament_lint_auto REQUIRED)
+  list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_copyright)
+  ament_lint_auto_find_test_dependencies()
+  # add_subdirectory(test)
+
+endif()
 
 ament_package()
