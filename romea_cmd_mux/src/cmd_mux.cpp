@@ -1,16 +1,13 @@
 // Copyright 2022 INRAE, French National Research Institute for Agriculture, Food and Environment
 // Add license
 
-// local
-#include "romea_cmd_mux/cmd_mux.hpp"
-
-// ros
-#include <rclcpp_components/register_node_macro.hpp>
-
 // std
 #include <memory>
 #include <string>
 #include <utility>
+
+// local
+#include "romea_cmd_mux/cmd_mux.hpp"
 
 namespace romea
 {
@@ -154,4 +151,5 @@ bool CmdMux::has_highest_priority_(SubscriberMap::iterator it, const rclcpp::Tim
 
 }  /// namespace romea
 
+#include "rclcpp_components/register_node_macro.hpp"
 RCLCPP_COMPONENTS_REGISTER_NODE(romea::CmdMux)
