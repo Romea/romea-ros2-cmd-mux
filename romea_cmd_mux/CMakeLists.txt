@@ -15,6 +15,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+string(TOUPPER $ENV{ROS_DISTRO} ROS_DISTRO)
+set(ROS_DISTRO "ROS_${ROS_DISTRO}")
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -39,10 +41,25 @@ ament_target_dependencies(${PROJECT_NAME}
   romea_cmd_mux_msgs
   romea_cmd_mux_utils)
 
-rclcpp_components_register_node(${PROJECT_NAME}
+if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
+  add_executable(cmd_mux_node
+    src/cmd_mux.cpp
+    src/cmd_mux_node.cpp)
+
+  target_include_directories(cmd_mux_node PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+
+  ament_target_dependencies(cmd_mux_node
+    rclcpp
+    rclcpp_components
+    romea_cmd_mux_msgs
+    romea_cmd_mux_utils)
+else()
+  rclcpp_components_register_node(${PROJECT_NAME}
   PLUGIN "romea::CmdMux"
   EXECUTABLE cmd_mux_node
-)
+  EXECUTOR "MultiThreadedExecutor")
+endif()
 
 install(TARGETS
   ${PROJECT_NAME}

@@ -91,9 +91,16 @@ void CmdMux::subscribe_callback_(
   auto & subscriber = subscribers_[request->priority];
 
   subscriber.timeout.from_seconds(request->timeout);
+
   auto f = std::bind(&CmdMux::publish_callback_, this, _1, request->priority);
   auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile();
-  subscriber.sub = node_->create_generic_subscription(request->topic, topics_type_, qos, f);
+
+  rclcpp::SubscriptionOptions options;
+  options.callback_group =
+    node_->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+
+  subscriber.sub =
+    node_->create_generic_subscription(request->topic, topics_type_, qos, f, options);
 
   response->result = Response::ACCEPTED;
 }
