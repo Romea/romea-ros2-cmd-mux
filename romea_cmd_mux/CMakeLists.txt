@@ -42,6 +42,8 @@ ament_target_dependencies(${PROJECT_NAME}
   romea_cmd_mux_utils)
 
 if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
+  rclcpp_components_register_nodes(${PROJECT_NAME} "romea::CmdMux")
+
   add_executable(cmd_mux_node
     src/cmd_mux.cpp
     src/cmd_mux_node.cpp)
@@ -54,6 +56,10 @@ if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
     rclcpp_components
     romea_cmd_mux_msgs
     romea_cmd_mux_utils)
+  
+  install(TARGETS
+    cmd_mux_node
+    DESTINATION lib/${PROJECT_NAME})
 else()
   rclcpp_components_register_node(${PROJECT_NAME}
   PLUGIN "romea::CmdMux"
