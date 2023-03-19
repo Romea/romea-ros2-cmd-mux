@@ -56,7 +56,7 @@ if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
     rclcpp_components
     romea_cmd_mux_msgs
     romea_cmd_mux_utils)
-  
+
   install(TARGETS
     cmd_mux_node
     DESTINATION lib/${PROJECT_NAME})
