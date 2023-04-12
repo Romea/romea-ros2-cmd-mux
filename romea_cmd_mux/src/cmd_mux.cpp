@@ -96,8 +96,9 @@ void CmdMux::subscribe_callback_(
   auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile();
 
   rclcpp::SubscriptionOptions options;
-  options.callback_group =
-    node_->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+  // TODO(JEAN) search why MutuallyExclusive callback group don't work
+  // options.callback_group =
+  //   node_->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
 
   subscriber.sub =
     node_->create_generic_subscription(request->topic, topics_type_, qos, f, options);
