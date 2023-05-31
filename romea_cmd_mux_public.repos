@@ -1,0 +1,5 @@
+repositories:
+  romea_ros2/tools/romea_cmd_mux:
+    type: git
+    url: https://github.com/Romea/romea-ros2-cmd_mux.git
+    version: main
