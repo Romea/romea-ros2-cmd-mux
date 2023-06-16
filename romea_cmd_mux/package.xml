@@ -3,9 +3,9 @@
 <package format="3">
   <name>romea_cmd_mux</name>
   <version>0.0.0</version>
-  <description>Package romea_cmd_mux description</description>
+  <description>Package containing implementation of romea cmd_mux</description>
   <maintainer email="jean.laneurit@inrae.fr">Jean Laneurit</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
