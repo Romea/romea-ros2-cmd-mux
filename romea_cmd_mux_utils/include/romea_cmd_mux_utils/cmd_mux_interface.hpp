@@ -31,8 +31,9 @@ namespace romea
 class CmdMuxInterface
 {
 public:
+  template<typename Node>
   ROMEA_CMD_MUX_UTILS_PUBLIC
-  explicit CmdMuxInterface(std::shared_ptr<rclcpp::Node> node);
+  explicit CmdMuxInterface(std::shared_ptr<Node> node);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
   ~CmdMuxInterface() = default;
@@ -51,6 +52,16 @@ private:
   CmdMuxUnsubscriptionClient unsubscription_;
   std::list<std::string> subscribed_topics_;
 };
+
+
+//-----------------------------------------------------------------------------
+template<typename Node>
+CmdMuxInterface::CmdMuxInterface(std::shared_ptr<Node> node)
+: subscription_(node),
+  unsubscription_(node),
+  subscribed_topics_()
+{
+}
 
 }  // namespace romea
 

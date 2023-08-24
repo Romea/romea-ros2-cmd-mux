@@ -33,7 +33,7 @@ std::string extract_cmd_mux_name(const std::string & service_name)
 
 //-----------------------------------------------------------------------------
 void log_ununsubscription_has_been_accepted(
-  std::shared_ptr<rclcpp::Node> node,
+  const rclcpp::Logger & logger,
   const std::string & service_name,
   const std::string & topic)
 {
@@ -42,7 +42,7 @@ void log_ununsubscription_has_been_accepted(
   std::stringstream msg;
   msg << "Ununsubscription request for topic " << topic;
   msg << " has been accepted by " + cmd_mux_name;
-  RCLCPP_INFO_STREAM(node->get_logger(), msg.str());
+  RCLCPP_INFO_STREAM(logger, msg.str());
 }
 
 //-----------------------------------------------------------------------------
@@ -90,15 +90,6 @@ void throw_fail_to_call_ununsubscription_service(
 namespace romea
 {
 
-//-----------------------------------------------------------------------------
-CmdMuxUnsubscriptionClient::CmdMuxUnsubscriptionClient(std::shared_ptr<rclcpp::Node> node)
-: node_(node),
-  client_(nullptr)
-{
-  using ServiceType = romea_cmd_mux_msgs::srv::Unsubscribe;
-  client_ = node->create_client<ServiceType>("cmd_mux/unsubscribe");
-}
-
 
 //-----------------------------------------------------------------------------
 CmdMuxUnsubscriptionClient::Result
@@ -129,7 +120,7 @@ void CmdMuxUnsubscriptionClient::unsubscribe(const std::string & topic_name)
 
   switch (unsubscribe_(topic_name)) {
     case Result::ACCEPTED:
-      log_ununsubscription_has_been_accepted(node_, service_name, topic_name);
+      log_ununsubscription_has_been_accepted(logger_, service_name, topic_name);
       break;
     case Result::REJECTED:
       throw_ununsubscription_has_been_rejected(service_name, topic_name);

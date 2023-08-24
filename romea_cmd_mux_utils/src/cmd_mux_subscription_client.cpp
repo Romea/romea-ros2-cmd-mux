@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // std
 #include <memory>
 #include <string>
@@ -33,23 +32,18 @@ std::string extract_cmd_mux_name(const std::string & service_name)
 
 //-----------------------------------------------------------------------------
 void log_subscription_has_been_accepted_(
-  std::shared_ptr<rclcpp::Node> node,
-  const std::string & service_name,
-  const std::string & topic)
+  const rclcpp::Logger & logger, const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
   std::stringstream msg;
   msg << "Subscription request for topic " << topic;
   msg << " has been accepted by " + cmd_mux_name;
-  RCLCPP_INFO_STREAM(node->get_logger(), msg.str());
+  RCLCPP_INFO_STREAM(logger, msg.str());
 }
 
-
 //-----------------------------------------------------------------------------
-void throw_topic_is_already_registered(
-  const std::string & service_name,
-  const std::string & topic)
+void throw_topic_is_already_registered(const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -61,9 +55,7 @@ void throw_topic_is_already_registered(
 }
 
 //-----------------------------------------------------------------------------
-void throw_priority_is_already_used(
-  const std::string & service_name,
-  const std::string & topic)
+void throw_priority_is_already_used(const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -76,8 +68,7 @@ void throw_priority_is_already_used(
 
 //-----------------------------------------------------------------------------
 void throw_fail_to_send_subscription_request(
-  const std::string & service_name,
-  const std::string & topic)
+  const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -87,11 +78,9 @@ void throw_fail_to_send_subscription_request(
   throw std::runtime_error(msg.str());
 }
 
-
 //-----------------------------------------------------------------------------
 void throw_fail_to_call_subscription_service(
-  const std::string & service_name,
-  const std::string & topic)
+  const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -107,20 +96,8 @@ namespace romea
 {
 
 //-----------------------------------------------------------------------------
-CmdMuxSubscriptionClient::CmdMuxSubscriptionClient(std::shared_ptr<rclcpp::Node> node)
-: node_(node),
-  client_(nullptr)
-{
-  using ServiceType = romea_cmd_mux_msgs::srv::Subscribe;
-  client_ = node->create_client<ServiceType>("cmd_mux/subscribe");
-}
-
-
-//-----------------------------------------------------------------------------
-CmdMuxSubscriptionClient::Result CmdMuxSubscriptionClient::subsribe_(
-  const std::string & topic,
-  const int & priority,
-  const double & timeout)
+CmdMuxSubscriptionClient::Result CmdMuxSubscriptionClient::subscribe_(
+  const std::string & topic, int priority, double timeout)
 {
   if (client_->wait_for_service(WAIT_FOR_SERVICE_TIMEOUT)) {
     using RequestType = romea_cmd_mux_msgs::srv::Subscribe::Request;
@@ -130,9 +107,7 @@ CmdMuxSubscriptionClient::Result CmdMuxSubscriptionClient::subsribe_(
     request->timeout = timeout;
 
     auto result = client_->async_send_request(request);
-    if (rclcpp::spin_until_future_complete(node_, result) ==
-      rclcpp::FutureReturnCode::SUCCESS)
-    {
+    if (rclcpp::spin_until_future_complete(node_, result) == rclcpp::FutureReturnCode::SUCCESS) {
       return static_cast<Result>(result.get()->result);
     } else {
       return FAIL_TO_SEND_REQUEST;
@@ -144,15 +119,13 @@ CmdMuxSubscriptionClient::Result CmdMuxSubscriptionClient::subsribe_(
 
 //-----------------------------------------------------------------------------
 void CmdMuxSubscriptionClient::subscribe(
-  const std::string & topic_name,
-  const int & priority,
-  const double & timeout)
+  const std::string & topic_name, int priority, double timeout)
 {
   std::string service_name = client_->get_service_name();
 
-  switch (subsribe_(topic_name, priority, timeout)) {
+  switch (subscribe_(topic_name, priority, timeout)) {
     case Result::ACCEPTED:
-      log_subscription_has_been_accepted_(node_, service_name, topic_name);
+      log_subscription_has_been_accepted_(logger_, service_name, topic_name);
       break;
     case Result::FAIL_TO_CALL_SERVICE:
       throw_fail_to_call_subscription_service(service_name, topic_name);

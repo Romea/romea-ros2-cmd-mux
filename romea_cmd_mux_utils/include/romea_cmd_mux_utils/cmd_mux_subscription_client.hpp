@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CMD_MUX_UTILS__CMD_MUX_SUBSCRIPTION_CLIENT_HPP_
 #define ROMEA_CMD_MUX_UTILS__CMD_MUX_SUBSCRIPTION_CLIENT_HPP_
-
 
 // std
 #include <memory>
@@ -48,25 +46,30 @@ private:
   using Service = romea_cmd_mux_msgs::srv::Subscribe;
 
 public:
+  template<typename Node>
   ROMEA_CMD_MUX_UTILS_PUBLIC
-  explicit CmdMuxSubscriptionClient(std::shared_ptr<rclcpp::Node> node);
+  explicit CmdMuxSubscriptionClient(std::shared_ptr<Node> node);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
-  void subscribe(
-    const std::string & topic,
-    const int & priority,
-    const double & timeout);
+  void subscribe(const std::string & topic, int priority, double timeout);
 
 private:
-  Result subsribe_(
-    const std::string & topic,
-    const int & priority,
-    const double & timeout);
+  Result subscribe_(const std::string & topic, int priority, double timeout);
 
 private:
-  rclcpp::Node::SharedPtr node_;
+  rclcpp::node_interfaces::NodeBaseInterface::SharedPtr node_;
+  const rclcpp::Logger & logger_;
   rclcpp::Client<Service>::SharedPtr client_;
 };
+
+//-----------------------------------------------------------------------------
+template<typename Node>
+CmdMuxSubscriptionClient::CmdMuxSubscriptionClient(std::shared_ptr<Node> node)
+: node_(node->get_node_base_interface()), logger_(node->get_logger()), client_(nullptr)
+{
+  using ServiceType = romea_cmd_mux_msgs::srv::Subscribe;
+  client_ = node->template create_client<ServiceType>("cmd_mux/subscribe");
+}
 
 }  // namespace romea
 

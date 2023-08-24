@@ -23,15 +23,6 @@
 namespace romea
 {
 
-
-//-----------------------------------------------------------------------------
-CmdMuxInterface::CmdMuxInterface(std::shared_ptr<rclcpp::Node> node)
-: subscription_(node),
-  unsubscription_(node),
-  subscribed_topics_()
-{
-}
-
 //-----------------------------------------------------------------------------
 void CmdMuxInterface::subscribe(
   const std::string & topic,
