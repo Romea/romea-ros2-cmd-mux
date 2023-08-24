@@ -58,7 +58,7 @@ private:
 
 private:
   rclcpp::node_interfaces::NodeBaseInterface::SharedPtr node_;
-  const rclcpp::Logger & logger_;
+  rclcpp::Logger logger_;
   rclcpp::Client<Service>::SharedPtr client_;
 };
 
