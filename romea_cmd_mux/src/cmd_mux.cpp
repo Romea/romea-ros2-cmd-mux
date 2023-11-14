@@ -103,6 +103,7 @@ void CmdMux::subscribe_callback_(
   auto & subscriber = subscribers_[request->priority];
 
   subscriber.timeout.from_seconds(request->timeout);
+  subscriber.msg_stamp = rclcpp::Time(0ULL, node->get_clock()->get_clock_type());
 
   auto f = std::bind(&CmdMux::publish_callback_, this, _1, request->priority);
   auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile();
