@@ -32,7 +32,10 @@ CmdMux::CmdMux(const rclcpp::NodeOptions & options)
   subscribers_(),
   subscribe_service_(),
   unsubscribe_service_(),
-  topics_type_()
+  topics_type_(),
+  diagnostic_msg_(),
+  diagnostic_publisher_(),
+  timer_()
 {
   using std::placeholders::_1;
   using std::placeholders::_2;
@@ -51,8 +54,20 @@ CmdMux::CmdMux(const rclcpp::NodeOptions & options)
   unsubscribe_service_ = node_->create_service<romea_cmd_mux_msgs::srv::Unsubscribe>(
     "~/unsubscribe", std::bind(&CmdMux::unsubscribe_callback_, this, _1, _2));
 
+
   auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).reliable().durability_volatile();
   publisher_ = node_->create_generic_publisher("~/out", topics_type_, qos);
+
+  diagnostic_msg_.status.push_back(diagnostic_msgs::msg::DiagnosticStatus());
+  diagnostic_msg_.status[0].name = node_->get_fully_qualified_name();
+
+  diagnostic_publisher_ = node_->create_publisher<DiagnosticMsg>(
+    "/diagnostics", rclcpp::SystemDefaultsQoS());
+
+  timer_ = node_->create_wall_timer(
+    std::chrono::seconds(1), std::bind(&CmdMux::timer_callback_, this));
+
+  // status_.
 }
 
 //-----------------------------------------------------------------------------
@@ -61,11 +76,6 @@ CmdMux::get_node_base_interface() const
 {
   return node_->get_node_base_interface();
 }
-
-//-----------------------------------------------------------------------------
-// void CmdMux::diagnosticCallback_(ros::TimerEvent & event)
-// {
-// }
 
 //-----------------------------------------------------------------------------
 void CmdMux::subscribe_callback_(
@@ -102,7 +112,7 @@ void CmdMux::subscribe_callback_(
 
   auto & subscriber = subscribers_[request->priority];
 
-  subscriber.timeout.from_seconds(request->timeout);
+  subscriber.timeout = rclcpp::Duration::from_seconds(request->timeout);
   subscriber.msg_stamp = rclcpp::Time(0ULL, node_->get_clock()->get_clock_type());
 
   auto f = std::bind(&CmdMux::publish_callback_, this, _1, request->priority);
@@ -154,6 +164,7 @@ void CmdMux::publish_callback_(MsgSharedPtr msg, unsigned char priotity)
   rclcpp::Time now = node_->get_clock()->now();
   auto it = subscribers_.find(priotity);
   (*it).second.msg_stamp = now;
+
   if (has_highest_priority_(it, now)) {
     publisher_->publish(*msg);
   }
@@ -168,6 +179,36 @@ bool CmdMux::has_highest_priority_(SubscriberMap::iterator it, const rclcpp::Tim
     }
   }
   return true;
+}
+
+//-----------------------------------------------------------------------------
+void CmdMux::timer_callback_()
+{
+  rclcpp::Time now = node_->get_clock()->now();
+  diagnostic_msg_.status[0].values.clear();
+  diagnostic_msg_.header.stamp = now;
+
+  std::lock_guard<std::mutex> lock(mutex_);
+
+  if (subscribers_.empty()) {
+    diagnostic_msg_.status[0].message = "No node is connected to mutiplexer";
+    diagnostic_msg_.status[0].level = diagnostic_msgs::msg::DiagnosticStatus::WARN;
+  } else {
+    diagnostic_msg_.status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
+  }
+
+  for (const auto &[priority, subscriber] : subscribers_) {
+    diagnostic_msgs::msg::KeyValue key;
+    key.key = std::string(subscriber.sub->get_topic_name());
+    key.value = "priority: " + std::to_string(static_cast<int>(priority)) + ", ";
+    if (now - subscriber.msg_stamp < subscriber.timeout) {
+      key.value += "active";
+    } else {
+      key.value += "inactive";
+    }
+    diagnostic_msg_.status[0].values.push_back(key);
+  }
+  diagnostic_publisher_->publish(diagnostic_msg_);
 }
 
 }  /// namespace romea

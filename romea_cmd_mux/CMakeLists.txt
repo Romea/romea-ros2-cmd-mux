@@ -24,6 +24,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(romea_cmd_mux_msgs REQUIRED)
 find_package(romea_cmd_mux_utils REQUIRED)
+find_package(diagnostic_msgs REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
   src/cmd_mux.cpp)
@@ -39,7 +40,8 @@ ament_target_dependencies(${PROJECT_NAME}
   rclcpp
   rclcpp_components
   romea_cmd_mux_msgs
-  romea_cmd_mux_utils)
+  romea_cmd_mux_utils
+  diagnostic_msgs)
 
 if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
   rclcpp_components_register_nodes(${PROJECT_NAME} "romea::CmdMux")
@@ -55,7 +57,8 @@ if(${ROS_DISTRO} STREQUAL "ROS_GALACTIC")
     rclcpp
     rclcpp_components
     romea_cmd_mux_msgs
-    romea_cmd_mux_utils)
+    romea_cmd_mux_utils
+    diagnostic_msgs)
 
   install(TARGETS
     cmd_mux_node

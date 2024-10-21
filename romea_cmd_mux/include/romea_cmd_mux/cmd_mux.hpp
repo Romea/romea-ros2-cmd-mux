@@ -26,6 +26,7 @@
 // ros
 #include "romea_cmd_mux_msgs/srv/subscribe.hpp"
 #include "romea_cmd_mux_msgs/srv/unsubscribe.hpp"
+#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 
 // local
 #include "romea_cmd_mux/subscriber.hpp"
@@ -41,6 +42,8 @@ protected:
   using SubscriberMap = std::map<unsigned char, Subscriber>;
   using PublisherSharedPtr = rclcpp::GenericPublisher::SharedPtr;
   using MsgSharedPtr = std::shared_ptr<rclcpp::SerializedMessage>;
+  using DiagnosticMsg = diagnostic_msgs::msg::DiagnosticArray;
+  using DiagnosticPublisherPtr = rclcpp::Publisher<DiagnosticMsg>::SharedPtr;
 
   using SubscribeServiceSharedPtr =
     rclcpp::Service<romea_cmd_mux_msgs::srv::Subscribe>::SharedPtr;
@@ -78,6 +81,8 @@ protected:
 
   void publish_callback_(MsgSharedPtr msg, unsigned char priotity);
 
+  void timer_callback_();
+
 protected:
   std::mutex mutex_;
   rclcpp::Node::SharedPtr node_;
@@ -87,6 +92,10 @@ protected:
   SubscribeServiceSharedPtr subscribe_service_;
   UnsubscribeServiceSharedPtr unsubscribe_service_;
   std::string topics_type_;
+
+  DiagnosticMsg diagnostic_msg_;
+  DiagnosticPublisherPtr diagnostic_publisher_;
+  rclcpp::TimerBase::SharedPtr timer_;
 };
 
 }  // namespace romea
