@@ -1,6 +1,6 @@
-# ROMEA Cmd Mux
+# romea_ros2_cmd_mux #
 
-This stack provides a generic command mutiplexer implementation based on ideas found in [topic_tools mux](https://github.com/ros-tooling/topic_tools), [twist_mux](https://github.com/ros-teleop/twist_mux) or [cmd_vel_mux](https://github.com/kobuki-base/cmd_vel_mux) nodes.  It takes N input topics and outputs the messages from a single one according their priority and their acitivity. Finally, thanks to rclcpp's GenericSubscriber and GenericPublisher any kind of messages can be mutiplexed.   For more detailed information, please refer to the README files of each individual package.
+This project provides a generic ROS2 command mutiplexer implementation based on ideas found in [topic_tools mux](https://github.com/ros-tooling/topic_tools), [twist_mux](https://github.com/ros-teleop/twist_mux) or [cmd_vel_mux](https://github.com/kobuki-base/cmd_vel_mux) nodes.  It takes N input topics and outputs the messages from a single one according their priority and their acitivity. Finally, thanks to rclcpp's GenericSubscriber and GenericPublisher any kind of messages can be mutiplexed.   For more detailed information, please refer to the README files of each individual package.
 
 ## **Usage**
 
@@ -9,9 +9,7 @@ This stack provides a generic command mutiplexer implementation based on ideas f
 3. mkdir src
 4. wget https://github.com/Romea/romea-ros2-cmd-mux/blob/main/romea_cmd_mux_public.repos
 5. vcs import src < romea_cmd_mux.repos
-6. build packages
-   - catkin build for ROS1
-   - colcon build for ROS2
+6. colcon build
 7. create your application using this library
 
 ## **Contributing**
