@@ -36,8 +36,12 @@ void CmdMuxInterface::subscribe(
 //-----------------------------------------------------------------------------
 void CmdMuxInterface::unsubscribe(const std::string & topic)
 {
-  unsubscription_.unsubscribe(topic);
-  subscribed_topics_.remove(topic);
+  if (std::find(subscribed_topics_.begin(), subscribed_topics_.end(), topic) !=
+    subscribed_topics_.end())
+  {
+    unsubscription_.unsubscribe(topic);
+    subscribed_topics_.remove(topic);
+  }
 }
 
 }  // namespace romea
