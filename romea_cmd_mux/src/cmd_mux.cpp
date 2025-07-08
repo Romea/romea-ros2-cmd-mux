@@ -115,7 +115,9 @@ void CmdMux::subscribe_callback_(
   subscriber.timeout = rclcpp::Duration::from_seconds(request->timeout);
   subscriber.msg_stamp = rclcpp::Time(0ULL, node_->get_clock()->get_clock_type());
 
-  auto f = std::bind(&CmdMux::publish_callback_, this, _1, request->priority);
+  std::function<void(std::shared_ptr<rclcpp::SerializedMessage>)> f =
+    std::bind(&CmdMux::publish_callback_, this, _1, request->priority);
+
   auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile();
 
   rclcpp::SubscriptionOptions options;
