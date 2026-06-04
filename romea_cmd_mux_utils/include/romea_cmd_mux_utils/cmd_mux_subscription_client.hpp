@@ -47,8 +47,7 @@ private:
 
 public:
   template<typename Node>
-  ROMEA_CMD_MUX_UTILS_PUBLIC
-  explicit CmdMuxSubscriptionClient(std::shared_ptr<Node> node);
+  ROMEA_CMD_MUX_UTILS_PUBLIC explicit CmdMuxSubscriptionClient(std::shared_ptr<Node> node);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
   void subscribe(const std::string & topic, int priority, double timeout);

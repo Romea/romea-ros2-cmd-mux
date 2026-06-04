@@ -25,34 +25,19 @@
 class TestableCmdMux : public romea::CmdMux
 {
 public:
-  explicit TestableCmdMux(const rclcpp::NodeOptions & options)
-  : CmdMux(options)
-  {
-  }
+  explicit TestableCmdMux(const rclcpp::NodeOptions & options) : CmdMux(options) {}
 
-  std::shared_ptr<rclcpp::Node> get_node()
-  {
-    return node_;
-  }
+  std::shared_ptr<rclcpp::Node> get_node() { return node_; }
 };
 
 class TestCmdMuxServices : public ::testing::Test
 {
 public:
-  TestCmdMuxServices()
-  : cmd_mux()
-  {
-  }
+  TestCmdMuxServices() : cmd_mux() {}
 
-  static void SetUpTestCase()
-  {
-    rclcpp::init(0, nullptr);
-  }
+  static void SetUpTestCase() { rclcpp::init(0, nullptr); }
 
-  static void TearDownTestCase()
-  {
-    rclcpp::shutdown();
-  }
+  static void TearDownTestCase() { rclcpp::shutdown(); }
 
   void SetUp()
   {
@@ -60,12 +45,11 @@ public:
     cmd_mux_no.arguments({"--ros-args", "-p", "topics_type:=std_msgs/String"});
     cmd_mux = std::make_unique<TestableCmdMux>(cmd_mux_no);
 
-    cmd_mux_subscription_client = std::make_unique<romea::CmdMuxSubscriptionClient>(
-      cmd_mux->get_node());
-    cmd_mux_unsubscription_client = std::make_unique<romea::CmdMuxUnsubscriptionClient>(
-      cmd_mux->get_node());
+    cmd_mux_subscription_client =
+      std::make_unique<romea::CmdMuxSubscriptionClient>(cmd_mux->get_node());
+    cmd_mux_unsubscription_client =
+      std::make_unique<romea::CmdMuxUnsubscriptionClient>(cmd_mux->get_node());
   }
-
 
   std::unique_ptr<TestableCmdMux> cmd_mux;
   std::unique_ptr<romea::CmdMuxSubscriptionClient> cmd_mux_subscription_client;

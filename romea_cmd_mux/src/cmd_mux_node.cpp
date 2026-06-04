@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // std
 #include <memory>
 
 // local
 #include "romea_cmd_mux/cmd_mux.hpp"
-
 
 int main(int argc, char * argv[])
 {

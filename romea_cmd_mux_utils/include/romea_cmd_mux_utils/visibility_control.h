@@ -16,39 +16,38 @@
 #define ROMEA_CMD_MUX_UTILS__VISIBILITY_CONTROL_H_
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
 //     https://gcc.gnu.org/wiki/Visibility
 
 #if defined _WIN32 || defined __CYGWIN__
-  #ifdef __GNUC__
-    #define ROMEA_CMD_MUX_UTILS_EXPORT __attribute__ ((dllexport))
-    #define ROMEA_CMD_MUX_UTILS_IMPORT __attribute__ ((dllimport))
-  #else
-    #define ROMEA_CMD_MUX_UTILS_EXPORT __declspec(dllexport)
-    #define ROMEA_CMD_MUX_UTILS_IMPORT __declspec(dllimport)
-  #endif
-  #ifdef ROMEA_CMD_MUX_UTILS_BUILDING_DLL
-    #define ROMEA_CMD_MUX_UTILS_PUBLIC ROMEA_CMD_MUX_UTILS_EXPORT
-  #else
-    #define ROMEA_CMD_MUX_UTILS_PUBLIC ROMEA_CMD_MUX_UTILS_IMPORT
-  #endif
-  #define ROMEA_CMD_MUX_UTILS_PUBLIC_TYPE ROMEA_CMD_MUX_UTILS_PUBLIC
-  #define ROMEA_CMD_MUX_UTILS_LOCAL
+#ifdef __GNUC__
+#define ROMEA_CMD_MUX_UTILS_EXPORT __attribute__((dllexport))
+#define ROMEA_CMD_MUX_UTILS_IMPORT __attribute__((dllimport))
 #else
-  #define ROMEA_CMD_MUX_UTILS_EXPORT __attribute__ ((visibility("default")))
-  #define ROMEA_CMD_MUX_UTILS_IMPORT
-  #if __GNUC__ >= 4
-    #define ROMEA_CMD_MUX_UTILS_PUBLIC __attribute__ ((visibility("default")))
-    #define ROMEA_CMD_MUX_UTILS_LOCAL  __attribute__ ((visibility("hidden")))
-  #else
-    #define ROMEA_CMD_MUX_UTILS_PUBLIC
-    #define ROMEA_CMD_MUX_UTILS_LOCAL
-  #endif
-  #define ROMEA_CMD_MUX_UTILS_PUBLIC_TYPE
+#define ROMEA_CMD_MUX_UTILS_EXPORT __declspec(dllexport)
+#define ROMEA_CMD_MUX_UTILS_IMPORT __declspec(dllimport)
+#endif
+#ifdef ROMEA_CMD_MUX_UTILS_BUILDING_DLL
+#define ROMEA_CMD_MUX_UTILS_PUBLIC ROMEA_CMD_MUX_UTILS_EXPORT
+#else
+#define ROMEA_CMD_MUX_UTILS_PUBLIC ROMEA_CMD_MUX_UTILS_IMPORT
+#endif
+#define ROMEA_CMD_MUX_UTILS_PUBLIC_TYPE ROMEA_CMD_MUX_UTILS_PUBLIC
+#define ROMEA_CMD_MUX_UTILS_LOCAL
+#else
+#define ROMEA_CMD_MUX_UTILS_EXPORT __attribute__((visibility("default")))
+#define ROMEA_CMD_MUX_UTILS_IMPORT
+#if __GNUC__ >= 4
+#define ROMEA_CMD_MUX_UTILS_PUBLIC __attribute__((visibility("default")))
+#define ROMEA_CMD_MUX_UTILS_LOCAL __attribute__((visibility("hidden")))
+#else
+#define ROMEA_CMD_MUX_UTILS_PUBLIC
+#define ROMEA_CMD_MUX_UTILS_LOCAL
+#endif
+#define ROMEA_CMD_MUX_UTILS_PUBLIC_TYPE
 #endif
 
 #ifdef __cplusplus

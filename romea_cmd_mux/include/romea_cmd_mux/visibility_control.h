@@ -16,39 +16,38 @@
 #define ROMEA_CMD_MUX__VISIBILITY_CONTROL_H_
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
 //     https://gcc.gnu.org/wiki/Visibility
 
 #if defined _WIN32 || defined __CYGWIN__
-  #ifdef __GNUC__
-    #define ROMEA_CMD_MUX_EXPORT __attribute__ ((dllexport))
-    #define ROMEA_CMD_MUX_IMPORT __attribute__ ((dllimport))
-  #else
-    #define ROMEA_CMD_MUX_EXPORT __declspec(dllexport)
-    #define ROMEA_CMD_MUX_IMPORT __declspec(dllimport)
-  #endif
-  #ifdef ROMEA_CMD_MUX_BUILDING_DLL
-    #define ROMEA_CMD_MUX_PUBLIC ROMEA_CMD_MUX_EXPORT
-  #else
-    #define ROMEA_CMD_MUX_PUBLIC ROMEA_CMD_MUX_IMPORT
-  #endif
-  #define ROMEA_CMD_MUX_PUBLIC_TYPE ROMEA_CMD_MUX_PUBLIC
-  #define ROMEA_CMD_MUX_LOCAL
+#ifdef __GNUC__
+#define ROMEA_CMD_MUX_EXPORT __attribute__((dllexport))
+#define ROMEA_CMD_MUX_IMPORT __attribute__((dllimport))
 #else
-  #define ROMEA_CMD_MUX_EXPORT __attribute__ ((visibility("default")))
-  #define ROMEA_CMD_MUX_IMPORT
-  #if __GNUC__ >= 4
-    #define ROMEA_CMD_MUX_PUBLIC __attribute__ ((visibility("default")))
-    #define ROMEA_CMD_MUX_LOCAL  __attribute__ ((visibility("hidden")))
-  #else
-    #define ROMEA_CMD_MUX_PUBLIC
-    #define ROMEA_CMD_MUX_LOCAL
-  #endif
-  #define ROMEA_CMD_MUX_PUBLIC_TYPE
+#define ROMEA_CMD_MUX_EXPORT __declspec(dllexport)
+#define ROMEA_CMD_MUX_IMPORT __declspec(dllimport)
+#endif
+#ifdef ROMEA_CMD_MUX_BUILDING_DLL
+#define ROMEA_CMD_MUX_PUBLIC ROMEA_CMD_MUX_EXPORT
+#else
+#define ROMEA_CMD_MUX_PUBLIC ROMEA_CMD_MUX_IMPORT
+#endif
+#define ROMEA_CMD_MUX_PUBLIC_TYPE ROMEA_CMD_MUX_PUBLIC
+#define ROMEA_CMD_MUX_LOCAL
+#else
+#define ROMEA_CMD_MUX_EXPORT __attribute__((visibility("default")))
+#define ROMEA_CMD_MUX_IMPORT
+#if __GNUC__ >= 4
+#define ROMEA_CMD_MUX_PUBLIC __attribute__((visibility("default")))
+#define ROMEA_CMD_MUX_LOCAL __attribute__((visibility("hidden")))
+#else
+#define ROMEA_CMD_MUX_PUBLIC
+#define ROMEA_CMD_MUX_LOCAL
+#endif
+#define ROMEA_CMD_MUX_PUBLIC_TYPE
 #endif
 
 #ifdef __cplusplus

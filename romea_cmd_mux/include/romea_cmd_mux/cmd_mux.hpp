@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CMD_MUX__CMD_MUX_HPP_
 #define ROMEA_CMD_MUX__CMD_MUX_HPP_
-
 
 // std
 #include <map>
@@ -24,14 +22,13 @@
 #include <string>
 
 // ros
+#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 #include "romea_cmd_mux_msgs/srv/subscribe.hpp"
 #include "romea_cmd_mux_msgs/srv/unsubscribe.hpp"
-#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 
 // local
 #include "romea_cmd_mux/subscriber.hpp"
 #include "romea_cmd_mux/visibility_control.h"
-
 
 namespace romea
 {
@@ -45,12 +42,9 @@ protected:
   using DiagnosticMsg = diagnostic_msgs::msg::DiagnosticArray;
   using DiagnosticPublisherPtr = rclcpp::Publisher<DiagnosticMsg>::SharedPtr;
 
-  using SubscribeServiceSharedPtr =
-    rclcpp::Service<romea_cmd_mux_msgs::srv::Subscribe>::SharedPtr;
-  using SubscribeRequestSharedPtr =
-    std::shared_ptr<romea_cmd_mux_msgs::srv::Subscribe::Request>;
-  using SubscribeResponseSharedPtr =
-    std::shared_ptr<romea_cmd_mux_msgs::srv::Subscribe::Response>;
+  using SubscribeServiceSharedPtr = rclcpp::Service<romea_cmd_mux_msgs::srv::Subscribe>::SharedPtr;
+  using SubscribeRequestSharedPtr = std::shared_ptr<romea_cmd_mux_msgs::srv::Subscribe::Request>;
+  using SubscribeResponseSharedPtr = std::shared_ptr<romea_cmd_mux_msgs::srv::Subscribe::Response>;
   using UnsubscribeServiceSharedPtr =
     rclcpp::Service<romea_cmd_mux_msgs::srv::Unsubscribe>::SharedPtr;
   using UnsubscribeRequestSharedPtr =
@@ -63,21 +57,16 @@ public:
   explicit CmdMux(const rclcpp::NodeOptions & options);
 
   ROMEA_CMD_MUX_PUBLIC
-  rclcpp::node_interfaces::NodeBaseInterface::SharedPtr
-  get_node_base_interface() const;
+  rclcpp::node_interfaces::NodeBaseInterface::SharedPtr get_node_base_interface() const;
 
 protected:
-  bool has_highest_priority_(
-    SubscriberMap::iterator it,
-    const rclcpp::Time & now);
+  bool has_highest_priority_(SubscriberMap::iterator it, const rclcpp::Time & now);
 
   void subscribe_callback_(
-    const SubscribeRequestSharedPtr request,
-    SubscribeResponseSharedPtr response);
+    const SubscribeRequestSharedPtr request, SubscribeResponseSharedPtr response);
 
   void unsubscribe_callback_(
-    const UnsubscribeRequestSharedPtr request,
-    UnsubscribeResponseSharedPtr response);
+    const UnsubscribeRequestSharedPtr request, UnsubscribeResponseSharedPtr response);
 
   void publish_callback_(MsgSharedPtr msg, unsigned char priotity);
 

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CMD_MUX__SUBSCRIBER_DIAGNOSTIC_HPP_
 #define ROMEA_CMD_MUX__SUBSCRIBER_DIAGNOSTIC_HPP_
 
@@ -20,16 +19,13 @@
 // #include <ros/ros.h>
 // #include <diagnostic_updater/diagnostic_updater.h>
 
-
 namespace romea
 {
-
 
 // class  DiagnosticSubscriber : public diagnostic_updater::DiagnosticTask
 // {
 
 // public:
-
 
 //  DiagnosticSubscriber(const std::string &name, Subscriber * subscriber);
 
@@ -46,7 +42,6 @@ namespace romea
 //   Subscriber * subscriber_;
 //   mutable std::mutex mutex_;
 //};
-
 
 }  // namespace romea
 

@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // local
 // #include "subscriber_diagnostic.hpp"
 
-
 // namespace romea
 // {
-
 
 // DiagnosticSubscriber::DiagnosticSubscriber(const std::string &name,
 //                                           const std::string &topic,
@@ -84,8 +81,6 @@
 // mutable std::mutex mutex_;
 // };
 
-
 //} // namespace cmd_mux
-
 
 // #endif // TOPIC_HANDLE_H

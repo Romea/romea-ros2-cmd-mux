@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // std
 #include <memory>
 #include <string>
@@ -54,54 +53,45 @@ CmdMux::CmdMux(const rclcpp::NodeOptions & options)
   unsubscribe_service_ = node_->create_service<romea_cmd_mux_msgs::srv::Unsubscribe>(
     "~/unsubscribe", std::bind(&CmdMux::unsubscribe_callback_, this, _1, _2));
 
-
   auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).reliable().durability_volatile();
   publisher_ = node_->create_generic_publisher("~/out", topics_type_, qos);
 
   diagnostic_msg_.status.push_back(diagnostic_msgs::msg::DiagnosticStatus());
   diagnostic_msg_.status[0].name = node_->get_fully_qualified_name();
 
-  diagnostic_publisher_ = node_->create_publisher<DiagnosticMsg>(
-    "/diagnostics", rclcpp::SystemDefaultsQoS());
+  diagnostic_publisher_ =
+    node_->create_publisher<DiagnosticMsg>("/diagnostics", rclcpp::SystemDefaultsQoS());
 
-  timer_ = node_->create_wall_timer(
-    std::chrono::seconds(1), std::bind(&CmdMux::timer_callback_, this));
+  timer_ =
+    node_->create_wall_timer(std::chrono::seconds(1), std::bind(&CmdMux::timer_callback_, this));
 
   // status_.
 }
 
 //-----------------------------------------------------------------------------
-rclcpp::node_interfaces::NodeBaseInterface::SharedPtr
-CmdMux::get_node_base_interface() const
+rclcpp::node_interfaces::NodeBaseInterface::SharedPtr CmdMux::get_node_base_interface() const
 {
   return node_->get_node_base_interface();
 }
 
 //-----------------------------------------------------------------------------
 void CmdMux::subscribe_callback_(
-  const SubscribeRequestSharedPtr request,
-  SubscribeResponseSharedPtr response)
+  const SubscribeRequestSharedPtr request, SubscribeResponseSharedPtr response)
 {
   using std::placeholders::_1;
   std::lock_guard<std::mutex> lock(mutex_);
   using Response = romea_cmd_mux_msgs::srv::Subscribe::Response;
 
-  auto lambda = [&request](const std::pair<unsigned char, Subscriber> & s)
-    {
-      return s.second.sub->get_topic_name() == request->topic;
-    };
+  auto lambda = [&request](const std::pair<unsigned char, Subscriber> & s) {
+    return s.second.sub->get_topic_name() == request->topic;
+  };
 
-
-  auto itTopic = std::find_if(
-    std::cbegin(subscribers_),
-    std::cend(subscribers_),
-    lambda);
+  auto itTopic = std::find_if(std::cbegin(subscribers_), std::cend(subscribers_), lambda);
 
   if (itTopic != std::cend(subscribers_)) {
     response->result = Response::REJECTED_TOPIC_ALREADY_SUBSCRIBED;
     return;
   }
-
 
   auto itPriority = subscribers_.find(request->priority);
 
@@ -133,21 +123,15 @@ void CmdMux::subscribe_callback_(
 
 //-----------------------------------------------------------------------------
 void CmdMux::unsubscribe_callback_(
-  const UnsubscribeRequestSharedPtr request,
-  UnsubscribeResponseSharedPtr response)
+  const UnsubscribeRequestSharedPtr request, UnsubscribeResponseSharedPtr response)
 {
   std::lock_guard<std::mutex> lock(mutex_);
 
+  auto lambda = [&](const std::pair<unsigned char, Subscriber> & s) {
+    return s.second.sub->get_topic_name() == request->topic;
+  };
 
-  auto lambda = [&](const std::pair<unsigned char, Subscriber> & s)
-    {
-      return s.second.sub->get_topic_name() == request->topic;
-    };
-
-  auto it = std::find_if(
-    std::cbegin(subscribers_),
-    std::cend(subscribers_),
-    lambda);
+  auto it = std::find_if(std::cbegin(subscribers_), std::cend(subscribers_), lambda);
 
   if (it != subscribers_.end()) {
     subscribers_.erase(it);
@@ -156,7 +140,6 @@ void CmdMux::unsubscribe_callback_(
     response->result = romea_cmd_mux_msgs::srv::Unsubscribe::Response::REJECTED;
   }
 }
-
 
 //-----------------------------------------------------------------------------
 void CmdMux::publish_callback_(MsgSharedPtr msg, unsigned char priotity)
@@ -199,7 +182,7 @@ void CmdMux::timer_callback_()
     diagnostic_msg_.status[0].level = diagnostic_msgs::msg::DiagnosticStatus::OK;
   }
 
-  for (const auto &[priority, subscriber] : subscribers_) {
+  for (const auto & [priority, subscriber] : subscribers_) {
     diagnostic_msgs::msg::KeyValue key;
     key.key = std::string(subscriber.sub->get_topic_name());
     key.value = "priority: " + std::to_string(static_cast<int>(priority)) + ", ";
@@ -213,7 +196,7 @@ void CmdMux::timer_callback_()
   diagnostic_publisher_->publish(diagnostic_msg_);
 }
 
-}  /// namespace romea
+}  // namespace romea
 
 #include "rclcpp_components/register_node_macro.hpp"
 RCLCPP_COMPONENTS_REGISTER_NODE(romea::CmdMux)

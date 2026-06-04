@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // std
 #include <memory>
 #include <string>
@@ -25,9 +24,7 @@ namespace romea
 
 //-----------------------------------------------------------------------------
 void CmdMuxInterface::subscribe(
-  const std::string & topic,
-  const int & priority,
-  const double & timeout)
+  const std::string & topic, const int & priority, const double & timeout)
 {
   subscription_.subscribe(topic, priority, timeout);
   subscribed_topics_.push_back(topic);
@@ -36,9 +33,9 @@ void CmdMuxInterface::subscribe(
 //-----------------------------------------------------------------------------
 void CmdMuxInterface::unsubscribe(const std::string & topic)
 {
-  if (std::find(subscribed_topics_.begin(), subscribed_topics_.end(), topic) !=
-    subscribed_topics_.end())
-  {
+  if (
+    std::find(subscribed_topics_.begin(), subscribed_topics_.end(), topic) !=
+    subscribed_topics_.end()) {
     unsubscription_.unsubscribe(topic);
     subscribed_topics_.remove(topic);
   }

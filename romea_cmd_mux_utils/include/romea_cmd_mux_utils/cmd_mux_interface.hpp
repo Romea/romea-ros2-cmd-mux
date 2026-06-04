@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #ifndef ROMEA_CMD_MUX_UTILS__CMD_MUX_INTERFACE_HPP_
 #define ROMEA_CMD_MUX_UTILS__CMD_MUX_INTERFACE_HPP_
 
 // std
-#include <memory>
 #include <list>
+#include <memory>
 #include <string>
 
 // romea
@@ -32,17 +31,13 @@ class CmdMuxInterface
 {
 public:
   template<typename Node>
-  ROMEA_CMD_MUX_UTILS_PUBLIC
-  explicit CmdMuxInterface(std::shared_ptr<Node> node);
+  ROMEA_CMD_MUX_UTILS_PUBLIC explicit CmdMuxInterface(std::shared_ptr<Node> node);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
   ~CmdMuxInterface() = default;
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
-  void subscribe(
-    const std::string & topic,
-    const int & priority,
-    const double & timeout);
+  void subscribe(const std::string & topic, const int & priority, const double & timeout);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
   void unsubscribe(const std::string & topic);
@@ -53,13 +48,10 @@ private:
   std::list<std::string> subscribed_topics_;
 };
 
-
 //-----------------------------------------------------------------------------
 template<typename Node>
 CmdMuxInterface::CmdMuxInterface(std::shared_ptr<Node> node)
-: subscription_(node),
-  unsubscription_(node),
-  subscribed_topics_()
+: subscription_(node), unsubscription_(node), subscribed_topics_()
 {
 }
 

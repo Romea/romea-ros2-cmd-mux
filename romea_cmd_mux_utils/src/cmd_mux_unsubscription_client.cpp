@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // std
 #include <memory>
 #include <string>
@@ -33,9 +32,7 @@ std::string extract_cmd_mux_name(const std::string & service_name)
 
 //-----------------------------------------------------------------------------
 void log_ununsubscription_has_been_accepted(
-  const rclcpp::Logger & logger,
-  const std::string & service_name,
-  const std::string & topic)
+  const rclcpp::Logger & logger, const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -47,8 +44,7 @@ void log_ununsubscription_has_been_accepted(
 
 //-----------------------------------------------------------------------------
 void throw_ununsubscription_has_been_rejected(
-  const std::string & service_name,
-  const std::string & topic)
+  const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -60,8 +56,7 @@ void throw_ununsubscription_has_been_rejected(
 
 //-----------------------------------------------------------------------------
 void throw_fail_to_send_ununsubscription_request(
-  const std::string & service_name,
-  const std::string & topic)
+  const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -71,11 +66,9 @@ void throw_fail_to_send_ununsubscription_request(
   throw std::runtime_error(msg.str());
 }
 
-
 //-----------------------------------------------------------------------------
 void throw_fail_to_call_ununsubscription_service(
-  const std::string & service_name,
-  const std::string & topic)
+  const std::string & service_name, const std::string & topic)
 {
   std::string cmd_mux_name = extract_cmd_mux_name(service_name);
 
@@ -90,10 +83,9 @@ void throw_fail_to_call_ununsubscription_service(
 namespace romea
 {
 
-
 //-----------------------------------------------------------------------------
-CmdMuxUnsubscriptionClient::Result
-CmdMuxUnsubscriptionClient::unsubscribe_(const std::string & topic)
+CmdMuxUnsubscriptionClient::Result CmdMuxUnsubscriptionClient::unsubscribe_(
+  const std::string & topic)
 {
   if (client_->wait_for_service(WAIT_FOR_SERVICE_TIMEOUT)) {
     using RequestType = romea_cmd_mux_msgs::srv::Unsubscribe::Request;
@@ -101,9 +93,7 @@ CmdMuxUnsubscriptionClient::unsubscribe_(const std::string & topic)
     request->topic = topic;
 
     auto result = client_->async_send_request(request);
-    if (rclcpp::spin_until_future_complete(node_, result) ==
-      rclcpp::FutureReturnCode::SUCCESS)
-    {
+    if (rclcpp::spin_until_future_complete(node_, result) == rclcpp::FutureReturnCode::SUCCESS) {
       return static_cast<Result>(result.get()->result);
     } else {
       return FAIL_TO_SEND_REQUEST;
@@ -134,4 +124,4 @@ void CmdMuxUnsubscriptionClient::unsubscribe(const std::string & topic_name)
   }
 }
 
-}   // namespace romea
+}  // namespace romea

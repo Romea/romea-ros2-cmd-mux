@@ -46,8 +46,7 @@ private:
 
 public:
   template<typename Node>
-  ROMEA_CMD_MUX_UTILS_PUBLIC
-  explicit CmdMuxUnsubscriptionClient(std::shared_ptr<Node> node);
+  ROMEA_CMD_MUX_UTILS_PUBLIC explicit CmdMuxUnsubscriptionClient(std::shared_ptr<Node> node);
 
   ROMEA_CMD_MUX_UTILS_PUBLIC
   void unsubscribe(const std::string & topic);
