@@ -1,38 +1,41 @@
-# romea_ros2_cmd_mux #
+# romea_ros2_cmd_mux
 
-This project provides a generic ROS2 command mutiplexer implementation based on ideas found in [topic_tools mux](https://github.com/ros-tooling/topic_tools), [twist_mux](https://github.com/ros-teleop/twist_mux) or [cmd_vel_mux](https://github.com/kobuki-base/cmd_vel_mux) nodes.  It takes N input topics and outputs the messages from a single one according their priority and their acitivity. Finally, thanks to rclcpp's GenericSubscriber and GenericPublisher any kind of messages can be mutiplexed.   For more detailed information, please refer to the README files of each individual package.
+## Overview
 
-## **Usage**
+`romea_ros2_cmd_mux` groups the ROS2 packages used to multiplex command topics in the ROMEA ecosystem.
 
-1. create a ROS workspace
-2. cd worskpace
-3. mkdir src
-4. wget https://github.com/Romea/romea-ros2-cmd-mux/blob/main/romea_cmd_mux_public.repos
-5. vcs import src < romea_cmd_mux.repos
-6. colcon build
-7. create your application using this library
+The command mux receives commands from several input topics and republishes only one command stream. The selected input is the active source with the highest priority. The mux is message-type agnostic: it uses ROS2 generic publishers and subscriptions, so it can multiplex mobile base commands, velocity commands or other command message types selected at runtime.
 
-## **Contributing**
+This repository-level README gives a map of the stack. Detailed behavior, node interfaces, service definitions and C++ helper APIs are documented in the README of each package listed below.
 
-If you'd like to contribute to this project, here are some guidelines:
+## Packages
 
-1. Fork the repository.
-2. Create a new branch for your changes.
-3. Make your changes.
-4. Write tests to cover your changes.
-5. Run the tests to ensure they pass.
-6. Commit your changes.
-7. Push your changes to your forked repository.
-8. Submit a pull request.
+| Package | Role |
+| --- | --- |
+| `romea_cmd_mux` | Runtime command multiplexer node and component. |
+| `romea_cmd_mux_msgs` | Service definitions used to register and unregister command input topics. |
+| `romea_cmd_mux_utils` | C++ helper classes used by command-producing nodes to connect to a command mux. |
 
-## **License**
+## Usage
 
-This project is released under the Apache License 2.0. See the LICENSE file for details.
+This stack is usually consumed by command-producing nodes such as teleoperation, autonomous navigation, safety controllers or robot-specific bridges.
 
-## **Authors**
+In most cases, the runtime entry point is `romea_cmd_mux`: it starts the mux node, exposes `subscribe` and `unsubscribe` services, and publishes the selected command stream. Command-producing nodes usually use `romea_cmd_mux_utils` to register their output topic with the mux instead of calling the services directly.
 
-The Romea Cmd Mux stack was developed by **Jean Laneurit** in the context of various research projects carried out at INRAE.
+Use the specialized package README files when you need to inspect or extend a specific part of the stack:
 
-## **Contact**
+* `romea_cmd_mux` to configure and run the multiplexer node;
+* `romea_cmd_mux_msgs` to inspect the subscribe and unsubscribe service API;
+* `romea_cmd_mux_utils` to use the C++ client helpers from command-producing nodes.
 
-If you have any questions or comments about Romea Cmd Mux stack, please contact **[Jean Laneurit](mailto:jean.laneurit@inrae.fr)** 
+## License
+
+This project is released under the Apache License 2.0. See the `LICENSE` file for details.
+
+## Authors
+
+The `romea_ros2_cmd_mux` stack was developed by Jean Laneurit in the context of research projects carried out at INRAE.
+
+## Contact
+
+For questions or comments about this stack, contact [Jean Laneurit](mailto:jean.laneurit@inrae.fr).
