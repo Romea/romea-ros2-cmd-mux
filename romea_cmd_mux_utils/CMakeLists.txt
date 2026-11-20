@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(romea_cmd_mux_utils)
 
 # Default to C99
@@ -26,9 +26,11 @@ add_library(${PROJECT_NAME} SHARED
   src/cmd_mux_unsubscription_client.cpp
   src/cmd_mux_interface.cpp)
 
-ament_target_dependencies(${PROJECT_NAME}
-  rclcpp
-  romea_cmd_mux_msgs)
+target_link_libraries(${PROJECT_NAME}
+  PUBLIC
+    rclcpp::rclcpp
+    ${romea_cmd_mux_msgs_TARGETS}
+)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -37,10 +39,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_compile_definitions(${PROJECT_NAME}
   PRIVATE "ROMEA_CMD_MUX_UTILS_BUILDING_DLL")
 
-ament_export_include_directories(include)
 ament_export_dependencies(rclcpp)
 ament_export_dependencies(romea_cmd_mux_msgs)
-ament_export_libraries(${PROJECT_NAME})
+
+# ament_export_include_directories(include)
+# ament_export_libraries(${PROJECT_NAME})
+ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
 
 install(
   DIRECTORY include/

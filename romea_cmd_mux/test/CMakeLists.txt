@@ -5,5 +5,12 @@ find_package(ament_cmake_gtest REQUIRED)
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 ament_add_gtest(${PROJECT_NAME}_cmd_mux_services_test cmd_mux_services_test.cpp)
-target_link_libraries(${PROJECT_NAME}_cmd_mux_services_test ${PROJECT_NAME})
+
+target_link_libraries(${PROJECT_NAME}_cmd_mux_services_test
+    romea_cmd_mux
+    rclcpp::rclcpp
+    romea_cmd_mux_utils::romea_cmd_mux_utils
+    ${diagnostic_msgs_TARGETS}
+    ${romea_cmd_mux_msgs_TARGETS}
+)
 

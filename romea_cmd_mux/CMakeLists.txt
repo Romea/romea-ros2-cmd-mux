@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(romea_cmd_mux)
 
 # Default to C99
@@ -33,12 +33,21 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_compile_definitions(${PROJECT_NAME}
   PRIVATE "ROMEA_CMD_MUX_BUILDING_DLL")
 
-ament_target_dependencies(${PROJECT_NAME}
-  rclcpp
-  rclcpp_components
-  romea_cmd_mux_msgs
-  romea_cmd_mux_utils
-  diagnostic_msgs)
+# ament_target_dependencies(${PROJECT_NAME}
+#   rclcpp
+#   rclcpp_components
+#   romea_cmd_mux_msgs
+#   romea_cmd_mux_utils
+#   diagnostic_msgs)
+
+target_link_libraries(${PROJECT_NAME}
+  PRIVATE
+    rclcpp::rclcpp
+    rclcpp_components::component
+    romea_cmd_mux_utils::romea_cmd_mux_utils
+    ${romea_cmd_mux_msgs_TARGETS}
+    ${diagnostic_msgs_TARGETS}
+)
 
 rclcpp_components_register_node(${PROJECT_NAME}
   PLUGIN "romea::CmdMux"

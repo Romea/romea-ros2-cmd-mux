@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(romea_cmd_mux_msgs)
 
 # Default to C++14
@@ -11,12 +11,10 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
-find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   srv/Subscribe.srv
-  srv/Unsubscribe.srv
-  DEPENDENCIES std_msgs)
+  srv/Unsubscribe.srv)
 
 ament_export_dependencies(rosidl_default_runtime)
 ament_package()
